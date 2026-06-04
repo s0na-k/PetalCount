@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>PetalCount</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+
+        <div class="container">
+
+            <h1>PetalCount</h1>
+            <p class="subtitle">Build your flower order and get an instant price</p>
+
+            <div class="arrangement-section">
+                <p class="section-label">Arrangement type</p>
+                <div class="type-buttons">
+                    <button class="type-btn active" data-type="loose">Loose stem</button>
+                    <button class ="type-btn" data-type="wrapped">Wrapped</button>
+                    <button class="type-btn" data-type="vase">Vase</button>
+                </div>
+            </div>
+
+        
+
+            <div class="form-section">
+                <div class="col-headers">
+                    <span>Flower name</span>
+                    <span>Qty</span>
+                    <span>Unit price</span>
+                    <span></span>
+                </div>
+                <div id="flower-rows"
+                </div>
+                <button id="add-flower-btn">+ Add flower</button>
+            </div>
+
+            <button id="calculate-btn">Calculate</button>
+
+            <div id="results" class="results-section hidden">
+                <div id="results-breakdown"></div>
+                <div class="results-total">
+                    <span>Total</span>
+                    <span id="total-price">$0.00</span>
+                </div>
+                <div class="save-order-row">
+                    <input
+                        type="text"
+                        id="order-name-input"
+                        placeholder="Name this oder (e.g. Bridal Bouquet)"
+                    />
+                    <button id="save-orderobtn">Save order</button>
+                </div>
+            </div>
+
+            <div id="saved-orders" class="saved-orders-section">
+                <p class="section-label">Saved orders</p>
+                <div id="saved-orders-list"></div>
+            </div>
+            
+        </div>
+
+        <script src="app.js"></script>
+    </body>
+
+</html>

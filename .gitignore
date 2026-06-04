@@ -1,0 +1,15 @@
+# macOS system files
+.DS_Store
+.DS_Store?
+._*
+
+# Python cache files (you'll understand these when we get to Python)
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment files (sensitive config, never commit these)
+.env
+
+# VS Code settings
+.vscode/
