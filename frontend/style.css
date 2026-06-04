@@ -87,7 +87,7 @@ h1 {
     letter-spacing: 0.06em;
 }
 
-.flower.row {
+.flower-row {
     display: grid;
     grid-template-columns: 2fr 80px 100px 36px;
     gap: 8px;
@@ -112,10 +112,10 @@ h1 {
     border-color: #1a1a1a;
 }
 
-.flower-row input[type = "number"] {
+.flower-row input[type="number"] {
     font-size: 14px;
     font-family: inherit;
-    padding: 8px 12 px;
+    padding: 8px 12px;
     border: 1px solid #e8e8e4;
     border-radius: 8px;
     color: #1a1a1a;
@@ -225,7 +225,7 @@ h1 {
     color: #1a1a1a;
 }
 
-.result-line .tpe-label {
+.result-line .type-label {
     font-size: 11px;
     color: #aaaaaa;
     margin-left: 4px;
