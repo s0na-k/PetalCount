@@ -15,6 +15,12 @@ document.getElementById('add-flower-btn').addEventListener('click', function() {
             event.preventDefault()
         }
     })
+    qtyInput.addEventListener('blur', function() {
+        let qty = parseInt(qtyInput.value)
+        if(isNaN(qty)) {
+            qtyInput.value = 1
+        }
+    })
 
     const priceInput = row.querySelector('.price-input')
     priceInput.addEventListener('keydown', function(event) {
@@ -22,7 +28,16 @@ document.getElementById('add-flower-btn').addEventListener('click', function() {
             event.preventDefault()
         }
     })
+    priceInput.addEventListener('blur', function() {
+        let price = parseFloat(priceInput.value)
 
+        if(isNaN(price)) {
+            priceInput.value = (0).toFixed(2)
+        }
+        else {
+             priceInput.value = price.toFixed(2)
+        }
+    }) 
 
     document.getElementById('flower-rows').appendChild(row)
 
@@ -31,6 +46,16 @@ document.getElementById('add-flower-btn').addEventListener('click', function() {
         removeBtn.parentElement.parentElement.removeChild(removeBtn.parentElement)
     })
 })
+
+const types = document.querySelectorAll('.type-btn')
+for(let i = 0; i < types.length; i++) {
+    types[i].addEventListener('click', function(){
+        for(let j = 0; j < types.length; j++) {
+            types[j].classList.remove('active')
+        }  
+        this.classList.add('active')
+    })
+}
 
 document.getElementById('calculate-btn').addEventListener('click', function(){
     let total = 0
@@ -41,10 +66,10 @@ document.getElementById('calculate-btn').addEventListener('click', function(){
         let qty = parseInt(rows[i].querySelector('.qty-input').value)
         let price = parseFloat(rows[i].querySelector('.price-input').value)
 
-        if ((qty < 0)||(isNaN(qty))) {
-            qty = 0
+        if (isNaN(qty)) {
+            qty = 1
         }
-        if ((price < 0)||(isNaN(price))) {
+        if (isNaN(price)) {
             price = 0
         }
         total += qty * price
@@ -53,6 +78,6 @@ document.getElementById('calculate-btn').addEventListener('click', function(){
     
     document.getElementById('results').className = 'results-section'
 
-    document.getElementById('total-price').textContent = '$' + total
+    document.getElementById('total-price').textContent = '$' + total.toFixed(2)
 
 })
