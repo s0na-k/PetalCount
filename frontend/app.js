@@ -1,14 +1,38 @@
 console.log('app.js loaded')
+
+const inventory = {
+  "red rose":        { cost: 3,   loose: 9,  wrapped: 12, vase: 15 },
+  "white hydrangea": { cost: 8,   loose: 24, wrapped: 32, vase: 40 },
+  "white carnation": { cost: 2,   loose: 6,  wrapped: 8,  vase: 10 },
+  "greenery":        { cost: 2.5, loose: 7,  wrapped: 10, vase: 12 },
+  "lily":            { cost: 4,   loose: 12, wrapped: 16, vase: 20 },
+  "tulip":           { cost: 2,   loose: 6,  wrapped: 8,  vase: 10 },
+  "peony":           { cost: 7,   loose: 21, wrapped: 28, vase: 35 },
+}
+
 document.getElementById('add-flower-btn').addEventListener('click', function() {
     const row = document.createElement('div')
     row.className = 'flower-row'
 
     row.innerHTML = `
-        <input type="text" placeholder="e.g. Rose">
+        <input type="text" class="flower-name-input" placeholder="e.g. Rose">
         <input type="number" step="1" class="qty-input" min="0" placeholder="1">
         <input type="number" class="price-input" min="0" placeholder="0.00">
         <button class="remove-btn">x</button>
     `
+
+    
+    const flowerInput = row.querySelector('.flower-name-input')
+    flowerInput.addEventListener('blur', function(){
+        let flowerData = inventory[flowerInput.value]
+        
+        if(flowerData) {
+            const activeType = document.querySelector('.type-btn.active')
+            const type = activeType.dataset.type
+            priceInput.value = flowerData[type]
+        }
+    }) 
+
     const qtyInput = row.querySelector('.qty-input')
     qtyInput.addEventListener('keydown', function(event) {
         if (event.key === 'e' || event.key === '+' || event.key === '-' || event.key === '.') {
@@ -50,10 +74,21 @@ document.getElementById('add-flower-btn').addEventListener('click', function() {
 const types = document.querySelectorAll('.type-btn')
 for(let i = 0; i < types.length; i++) {
     types[i].addEventListener('click', function(){
+        const rows = document.querySelectorAll('.flower-row')
         for(let j = 0; j < types.length; j++) {
             types[j].classList.remove('active')
         }  
         this.classList.add('active')
+
+        for(let n = 0; n <rows.length; n++) {
+            const flowerInput = rows[n].querySelector('.flower-name-input')
+            const flowerData = inventory[flowerInput.value]
+            const priceInput = rows[n].querySelector('.price-input')
+
+            if(flowerData) {
+                priceInput.value = flowerData[this.dataset.type]
+            }
+        }
     })
 }
 
