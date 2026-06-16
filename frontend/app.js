@@ -20,19 +20,6 @@ document.getElementById('add-flower-btn').addEventListener('click', function() {
         <input type="number" class="price-input" min="0" placeholder="0.00">
         <button class="remove-btn">x</button>
     `
-
-    
-    const flowerInput = row.querySelector('.flower-name-input')
-    flowerInput.addEventListener('blur', function(){
-        let flowerData = inventory[flowerInput.value]
-        
-        if(flowerData) {
-            const activeType = document.querySelector('.type-btn.active')
-            const type = activeType.dataset.type
-            priceInput.value = flowerData[type]
-        }
-    }) 
-
     const qtyInput = row.querySelector('.qty-input')
     qtyInput.addEventListener('keydown', function(event) {
         if (event.key === 'e' || event.key === '+' || event.key === '-' || event.key === '.') {
@@ -65,6 +52,18 @@ document.getElementById('add-flower-btn').addEventListener('click', function() {
 
     document.getElementById('flower-rows').appendChild(row)
 
+    const flowerInput = row.querySelector('.flower-name-input')
+    flowerInput.addEventListener('blur', function(){
+        let flowerData = inventory[flowerInput.value]
+        
+        if(flowerData) {
+            const activeType = document.querySelector('.type-btn.active')
+            const type = activeType.dataset.type
+            priceInput.value = flowerData[type]
+        }
+    }) 
+
+
     const removeBtn = row.querySelector('.remove-btn')
     removeBtn.addEventListener('click', function() {
         removeBtn.parentElement.parentElement.removeChild(removeBtn.parentElement)
@@ -96,8 +95,11 @@ document.getElementById('calculate-btn').addEventListener('click', function(){
     let total = 0
     const rows = document.querySelectorAll('.flower-row')
 
+    document.getElementById('results-breakdown').innerHTML = ''
+
     for(let i=0; i < rows.length; i++) {
-        
+
+        let name = (rows[i].querySelector('.flower-name-input').value)
         let qty = parseInt(rows[i].querySelector('.qty-input').value)
         let price = parseFloat(rows[i].querySelector('.price-input').value)
 
@@ -108,6 +110,13 @@ document.getElementById('calculate-btn').addEventListener('click', function(){
             price = 0
         }
         total += qty * price
+        const row = document.createElement('div')
+        row.className = 'result-line'
+        row.innerHTML = `
+        <span>${name} x ${qty}</span>
+        <span>$${(qty*price).toFixed(2)}</span>
+        `
+        document.getElementById('results-breakdown').appendChild(row)
 
     }
     
