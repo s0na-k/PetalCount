@@ -10,6 +10,23 @@ const inventory = {
   "peony":           { cost: 7,   loose: 21, wrapped: 28, vase: 35 },
 }
 
+function renderSavedOrders() {
+    const stored = localStorage.getItem('savedOrders')
+    const allOrders = stored ? JSON.parse(stored) : []
+
+    document.getElementById('saved-orders-list').innerHTML= ''
+
+    for(let i = 0; i < allOrders.length; i++) {
+        const order = document.createElement('div')
+        order.className = 'saved-order-item'
+        order.innerHTML = `
+        <div class="saved-order-name">${allOrders[i].name}</div>
+        <span class="saved-order-meta">${allOrders[i].type} · ${allOrders[i].total}</span>
+        `
+        document.getElementById('saved-orders-list').appendChild(order)
+    }
+}
+
 document.getElementById('add-flower-btn').addEventListener('click', function() {
     const row = document.createElement('div')
     row.className = 'flower-row'
@@ -125,3 +142,37 @@ document.getElementById('calculate-btn').addEventListener('click', function(){
     document.getElementById('total-price').textContent = '$' + total.toFixed(2)
 
 })
+
+document.getElementById('save-order-btn').addEventListener('click', function() {
+    const orderName = document.getElementById('order-name-input')
+    if (!orderName.value) {
+       alert('Please enter a name for this order') 
+       return
+    }
+
+    const activeType = document.querySelector('.type-btn.active')
+    const type = activeType.dataset.type
+
+    const flowers = []
+    const rows = document.querySelectorAll('.flower-row')
+
+    for(let i=0; i < rows.length; i++) {
+        let name = rows[i].querySelector('.flower-name-input').value
+        let qty = parseInt(rows[i].querySelector('.qty-input').value)
+        let price = parseFloat(rows[i].querySelector('.price-input').value)
+        flowers.push({name: name, qty: qty, price: price})
+    }
+
+    const total = document.getElementById('total-price').textContent
+
+    const savedOrder = {name: orderName.value, type, flowers, total}
+
+    const stored = localStorage.getItem('savedOrders')
+    const allOrders = stored ? JSON.parse(stored) : []
+    allOrders.push(savedOrder)
+    localStorage.setItem('savedOrders', JSON.stringify(allOrders))
+    renderSavedOrders()
+    orderName.value = ""
+
+})
+renderSavedOrders()
