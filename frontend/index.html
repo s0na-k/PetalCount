@@ -28,14 +28,14 @@
 
             <div class="form-section">
                 <div class="col-headers">
-                    <span>Flower name</span>
+                    <span>Item Name</span>
                     <span>Qty</span>
-                    <span>Unit price</span>
+                    <span>Unit Price</span>
                     <span></span>
                 </div>
-                <div id="flower-rows">
+                <div id="item-rows">
                 </div>
-                <button id="add-flower-btn">+ Add flower</button>
+                <button id="add-item-btn">+ Add Item</button>
             </div>
 
             <button id="calculate-btn">Calculate</button>
@@ -61,6 +61,27 @@
                 <div id="saved-orders-list"></div>
             </div>
 
+        </div>
+
+        <div id="order-modal" class="modal-overlay">
+            <div class="modal-box">
+                <button id="close-btn">×</button>
+                <h2 id="modal-name"></h2>
+                <p id="modal-type"></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Qty</th>
+                            <th>Unit Price</th>
+                        </tr>
+                    </thead>
+                    <tbody id="modal-items">
+                    </tbody>
+                </table>
+                <p id="modal-total"></p>
+                
+            </div>
         </div>
 
         <script src="app.js"></script>

@@ -27,12 +27,12 @@ function renderSavedOrders() {
     }
 }
 
-document.getElementById('add-flower-btn').addEventListener('click', function() {
+document.getElementById('add-item-btn').addEventListener('click', function() {
     const row = document.createElement('div')
-    row.className = 'flower-row'
+    row.className = 'item-row'
 
     row.innerHTML = `
-        <input type="text" class="flower-name-input" placeholder="e.g. Rose">
+        <input type="text" class="item-name-input" placeholder="e.g. Rose, Myrtle, Vase">
         <input type="number" step="1" class="qty-input" min="0" placeholder="1">
         <input type="number" class="price-input" min="0" placeholder="0.00">
         <button class="remove-btn">x</button>
@@ -67,16 +67,16 @@ document.getElementById('add-flower-btn').addEventListener('click', function() {
         }
     }) 
 
-    document.getElementById('flower-rows').appendChild(row)
+    document.getElementById('item-rows').appendChild(row)
 
-    const flowerInput = row.querySelector('.flower-name-input')
-    flowerInput.addEventListener('blur', function(){
-        let flowerData = inventory[flowerInput.value]
+    const itemInput = row.querySelector('.item-name-input')
+    itemInput.addEventListener('blur', function(){
+        let itemData = inventory[itemInput.value]
         
-        if(flowerData) {
+        if(itemData) {
             const activeType = document.querySelector('.type-btn.active')
             const type = activeType.dataset.type
-            priceInput.value = flowerData[type]
+            priceInput.value = itemData[type]
         }
     }) 
 
@@ -90,19 +90,19 @@ document.getElementById('add-flower-btn').addEventListener('click', function() {
 const types = document.querySelectorAll('.type-btn')
 for(let i = 0; i < types.length; i++) {
     types[i].addEventListener('click', function(){
-        const rows = document.querySelectorAll('.flower-row')
+        const rows = document.querySelectorAll('.item-row')
         for(let j = 0; j < types.length; j++) {
             types[j].classList.remove('active')
         }  
         this.classList.add('active')
 
         for(let n = 0; n <rows.length; n++) {
-            const flowerInput = rows[n].querySelector('.flower-name-input')
-            const flowerData = inventory[flowerInput.value]
+            const itemInput = rows[n].querySelector('.item-name-input')
+            const itemData = inventory[itemInput.value]
             const priceInput = rows[n].querySelector('.price-input')
 
-            if(flowerData) {
-                priceInput.value = flowerData[this.dataset.type]
+            if(itemData) {
+                priceInput.value = itemData[this.dataset.type]
             }
         }
     })
@@ -110,13 +110,13 @@ for(let i = 0; i < types.length; i++) {
 
 document.getElementById('calculate-btn').addEventListener('click', function(){
     let total = 0
-    const rows = document.querySelectorAll('.flower-row')
+    const rows = document.querySelectorAll('.item-row')
 
     document.getElementById('results-breakdown').innerHTML = ''
 
     for(let i=0; i < rows.length; i++) {
 
-        let name = (rows[i].querySelector('.flower-name-input').value)
+        let name = (rows[i].querySelector('.item-name-input').value)
         let qty = parseInt(rows[i].querySelector('.qty-input').value)
         let price = parseFloat(rows[i].querySelector('.price-input').value)
 
@@ -153,19 +153,19 @@ document.getElementById('save-order-btn').addEventListener('click', function() {
     const activeType = document.querySelector('.type-btn.active')
     const type = activeType.dataset.type
 
-    const flowers = []
-    const rows = document.querySelectorAll('.flower-row')
+    const items = []
+    const rows = document.querySelectorAll('.item-row')
 
     for(let i=0; i < rows.length; i++) {
-        let name = rows[i].querySelector('.flower-name-input').value
+        let name = rows[i].querySelector('.item-name-input').value
         let qty = parseInt(rows[i].querySelector('.qty-input').value)
         let price = parseFloat(rows[i].querySelector('.price-input').value)
-        flowers.push({name: name, qty: qty, price: price})
+        items.push({name: name, qty: qty, price: price})
     }
 
     const total = document.getElementById('total-price').textContent
 
-    const savedOrder = {name: orderName.value, type, flowers, total}
+    const savedOrder = {name: orderName.value, type, items, total}
 
     const stored = localStorage.getItem('savedOrders')
     const allOrders = stored ? JSON.parse(stored) : []
