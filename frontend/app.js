@@ -23,9 +23,49 @@ function renderSavedOrders() {
         <div class="saved-order-name">${allOrders[i].name}</div>
         <span class="saved-order-meta">${allOrders[i].type} · ${allOrders[i].total}</span>
         `
+        order.addEventListener('click', function() {
+            const modal = document.getElementById('order-modal')
+            modal.classList.remove('hidden')
+
+            let modalName = document.getElementById('modal-name')
+            modalName.textContent = allOrders[i].name
+            let modalType = document.getElementById('modal-type')
+            modalType.textContent = allOrders[i].type
+            let modalTotal = document.getElementById('modal-total')
+            modalTotal.innerHTML = ` 
+                <span>Total</span>
+                <span>${allOrders[i].total}</span>
+            `
+
+            let modalItems = document.getElementById('modal-items')
+
+            for(let j = 0; j < allOrders[i].items.length; j++) {
+                const modalRow = document.createElement('tr')
+                modalRow.innerHTML = `
+                <td>${allOrders[i].items[j].name}</td>
+                <td>${allOrders[i].items[j].qty}</td>
+                <td>${allOrders[i].items[j].price}</td>
+                `
+                modalItems.appendChild(modalRow)
+            }
+        })
+        
         document.getElementById('saved-orders-list').appendChild(order)
     }
+
 }
+
+const closeBtn = document.getElementById('close-btn')
+closeBtn.addEventListener('click', function () {
+    const modal = document.getElementById('order-modal')
+    modal.classList.add('hidden')
+})
+
+document.getElementById('order-modal').addEventListener('click', function(event) {
+    if(event.target === this) {
+        this.classList.add('hidden')
+    }
+})
 
 document.getElementById('add-item-btn').addEventListener('click', function() {
     const row = document.createElement('div')
@@ -160,7 +200,7 @@ document.getElementById('save-order-btn').addEventListener('click', function() {
         let name = rows[i].querySelector('.item-name-input').value
         let qty = parseInt(rows[i].querySelector('.qty-input').value)
         let price = parseFloat(rows[i].querySelector('.price-input').value)
-        items.push({name: name, qty: qty, price: price})
+        items.push({name, qty, price})
     }
 
     const total = document.getElementById('total-price').textContent
