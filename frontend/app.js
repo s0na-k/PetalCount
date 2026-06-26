@@ -1,15 +1,26 @@
 console.log('app.js loaded')
 
 const inventory = {
-  "red rose":        { cost: 3,   loose: 9,  wrapped: 12, vase: 15 },
-  "white hydrangea": { cost: 8,   loose: 24, wrapped: 32, vase: 40 },
-  "white carnation": { cost: 2,   loose: 6,  wrapped: 8,  vase: 10 },
-  "greenery":        { cost: 2.5, loose: 7,  wrapped: 10, vase: 12 },
-  "lily":            { cost: 4,   loose: 12, wrapped: 16, vase: 20 },
-  "tulip":           { cost: 2,   loose: 6,  wrapped: 8,  vase: 10 },
-  "peony":           { cost: 7,   loose: 21, wrapped: 28, vase: 35 },
+  "rose":            {cost: 2,   loose: 4,  wrapped: 6, vase: 7 },
+  "red rose":        {cost: 2,   loose: 5,  wrapped: 7, vase: 8 },
+  "hydreangea":      {cost: 2,   loose: 6, wrapped: 8, vase: 10 },
+  "greenery":        { cost: 0.5, loose: 1,  wrapped: 2, vase: 2.5 },
+  "lily":            { cost: 3,   loose: 8, wrapped: 10, vase: 14 },
+  "tulip":           { cost: 1.5,   loose: 4,  wrapped: 5,  vase: 6 },
+  "peony":           { cost: 6,   loose: 18, wrapped: 25, vase: 30 },
 }
 
+// Capitalizes each word in a string
+function toTitleCase (str) {
+    const arr = str.split(" ")
+    const capitalized = arr.map(function(word) {
+        return word.charAt(0).toUpperCase() + word.slice(1)
+    })
+    return capitalized.join(" ")
+}
+/**
+ * Renders all saved orders from localStorage to the saved-orders-list div.
+ */ 
 function renderSavedOrders() {
     const stored = localStorage.getItem('savedOrders')
     const allOrders = stored ? JSON.parse(stored) : []
@@ -23,6 +34,7 @@ function renderSavedOrders() {
         <div class="saved-order-name">${allOrders[i].name}</div>
         <span class="saved-order-meta">${allOrders[i].type} · ${allOrders[i].total}</span>
         `
+        // Opens the modal and populates it with the clicked order's data
         order.addEventListener('click', function() {
             const modal = document.getElementById('order-modal')
             modal.classList.remove('hidden')
@@ -56,17 +68,19 @@ function renderSavedOrders() {
 }
 
 const closeBtn = document.getElementById('close-btn')
+// Closes the modal when the X button is clicked
 closeBtn.addEventListener('click', function () {
     const modal = document.getElementById('order-modal')
     modal.classList.add('hidden')
 })
-
+// Hides modal when the user clicks away
 document.getElementById('order-modal').addEventListener('click', function(event) {
     if(event.target === this) {
         this.classList.add('hidden')
     }
 })
 
+// Creates and appends a new item row when Add Item is clicked
 document.getElementById('add-item-btn').addEventListener('click', function() {
     const row = document.createElement('div')
     row.className = 'item-row'
@@ -77,25 +91,28 @@ document.getElementById('add-item-btn').addEventListener('click', function() {
         <input type="number" class="price-input" min="0" placeholder="0.00">
         <button class="remove-btn">x</button>
     `
+    // Blocks invalid characters (e, +, -, .) from quantity input
     const qtyInput = row.querySelector('.qty-input')
     qtyInput.addEventListener('keydown', function(event) {
         if (event.key === 'e' || event.key === '+' || event.key === '-' || event.key === '.') {
             event.preventDefault()
         }
     })
+    // Defaults quantity to 1 if left empty on blur
     qtyInput.addEventListener('blur', function() {
         let qty = parseInt(qtyInput.value)
         if(isNaN(qty)) {
             qtyInput.value = 1
         }
     })
-
+    // Blocks invalid characters (e, +, -) from price input
     const priceInput = row.querySelector('.price-input')
     priceInput.addEventListener('keydown', function(event) {
         if (event.key === 'e' || event.key === '+' || event.key === '-') {
             event.preventDefault()
         }
     })
+        // Defaults price to 0.00 and formats 2 decimal places on blur
     priceInput.addEventListener('blur', function() {
         let price = parseFloat(priceInput.value)
 
@@ -110,7 +127,9 @@ document.getElementById('add-item-btn').addEventListener('click', function() {
     document.getElementById('item-rows').appendChild(row)
 
     const itemInput = row.querySelector('.item-name-input')
+    // Looks up item in inventory and auto-fills the unit price
     itemInput.addEventListener('blur', function(){
+        itemInput.value = itemInput.value.toLowerCase()
         let itemData = inventory[itemInput.value]
         
         if(itemData) {
@@ -118,10 +137,12 @@ document.getElementById('add-item-btn').addEventListener('click', function() {
             const type = activeType.dataset.type
             priceInput.value = itemData[type]
         }
+        itemInput.value = toTitleCase(itemInput.value)
     }) 
 
 
     const removeBtn = row.querySelector('.remove-btn')
+    // Removes the selected item from the arrangement
     removeBtn.addEventListener('click', function() {
         removeBtn.parentElement.parentElement.removeChild(removeBtn.parentElement)
     })
@@ -129,6 +150,7 @@ document.getElementById('add-item-btn').addEventListener('click', function() {
 
 const types = document.querySelectorAll('.type-btn')
 for(let i = 0; i < types.length; i++) {
+    // Switches the active arrangement type and updates all item prices
     types[i].addEventListener('click', function(){
         const rows = document.querySelectorAll('.item-row')
         for(let j = 0; j < types.length; j++) {
@@ -138,7 +160,7 @@ for(let i = 0; i < types.length; i++) {
 
         for(let n = 0; n <rows.length; n++) {
             const itemInput = rows[n].querySelector('.item-name-input')
-            const itemData = inventory[itemInput.value]
+            const itemData = inventory[itemInput.value.toLowerCase()]
             const priceInput = rows[n].querySelector('.price-input')
 
             if(itemData) {
@@ -148,6 +170,7 @@ for(let i = 0; i < types.length; i++) {
     })
 }
 
+// Handles the calculation of the total price of the arrangement
 document.getElementById('calculate-btn').addEventListener('click', function(){
     let total = 0
     const rows = document.querySelectorAll('.item-row')
@@ -182,7 +205,7 @@ document.getElementById('calculate-btn').addEventListener('click', function(){
     document.getElementById('total-price').textContent = '$' + total.toFixed(2)
 
 })
-
+// Saves currentorder to localStorage, blocking duplicate name+type combinations
 document.getElementById('save-order-btn').addEventListener('click', function() {
     const orderName = document.getElementById('order-name-input')
     if (!orderName.value) {
@@ -209,6 +232,13 @@ document.getElementById('save-order-btn').addEventListener('click', function() {
 
     const stored = localStorage.getItem('savedOrders')
     const allOrders = stored ? JSON.parse(stored) : []
+    for(let i = 0; i < allOrders.length; i++) {
+        if(allOrders[i].name.toLowerCase() == savedOrder.name.toLowerCase() && allOrders[i].type == savedOrder.type) {
+            alert("There is already a saved order with this name & type.\nPlease enter a different name or type. ")
+            return
+        }
+    }
+    savedOrder.name = toTitleCase(savedOrder.name)
     allOrders.push(savedOrder)
     localStorage.setItem('savedOrders', JSON.stringify(allOrders))
     renderSavedOrders()
