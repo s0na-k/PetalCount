@@ -1,4 +1,14 @@
 console.log('app.js loaded')
+//TODO: Set up Font Awsome in index.html
+//TODO: Add icon buttons (load, edit, delete) to each saved order card in renderSavedOrders
+//TODO: Add character counter (e.g. "27/50") for the saved order name input
+//TODO: Add Edit, Load, Delete text buttons to the modal
+//TODO: Implement edit mode - load order into calculator and overwrite on save
+//TODO: Implement load as new = load order into calculator and save as a new entry
+//TODO: Implement delete order - remove from localStorage and re-render list
+//[ ]:DONE: FIXME: Fix modal items accumulating when same order opened multiple times
+//TODO: Add "Did you mean?" fuzzy matching
+
 
 const inventory = {
   "rose":            {cost: 2,   loose: 4,  wrapped: 6, vase: 7 },
@@ -18,6 +28,7 @@ function toTitleCase (str) {
     })
     return capitalized.join(" ")
 }
+
 /**
  * Renders all saved orders from localStorage to the saved-orders-list div.
  */ 
@@ -31,8 +42,16 @@ function renderSavedOrders() {
         const order = document.createElement('div')
         order.className = 'saved-order-item'
         order.innerHTML = `
-        <div class="saved-order-name">${allOrders[i].name}</div>
-        <span class="saved-order-meta">${allOrders[i].type} · ${allOrders[i].total}</span>
+        <div>
+         <span class="saved-order-name">${allOrders[i].name}</span>
+         <span class="saved-order-meta"> · ${allOrders[i].type} · ${allOrders[i].total}</span>
+        </div>
+       
+        <div class="saved-order-actions">
+        <i class="fa-solid fa-rotate-right action-load"></i>
+        <i class="fa-solid fa-pen action-edit"></i>
+        <i class="fa-solid fa-trash action-delete"></i>
+        </div>
         `
         // Opens the modal and populates it with the clicked order's data
         order.addEventListener('click', function() {
@@ -50,6 +69,7 @@ function renderSavedOrders() {
             `
 
             let modalItems = document.getElementById('modal-items')
+            modalItems.innerHTML = ''
 
             for(let j = 0; j < allOrders[i].items.length; j++) {
                 const modalRow = document.createElement('tr')

@@ -160,7 +160,7 @@ h1 {
 
 .remove-btn:hover {
     background-color: #fff0f0;
-    color: #e98ca8;
+    color: #e27878;
 }
 
 #add-item-btn {
@@ -303,6 +303,36 @@ h1 {
 .saved-order-meta {
     font-size: 11px;
     color: #aaaaaa;
+}
+
+.saved-order-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.saved-order-actions i {
+    font-size: 15px;
+    color: #aaaaaa;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+
+}
+
+.action-load:hover {
+    background-color: #e8f5f0;
+    color:#3d8c7a;
+}
+.action-edit:hover {
+    background-color: #fef4e4;
+    color:#c9b04c;
+
+}
+.action-delete:hover {
+    background-color: #fff0f0;
+    color:#e27878;
+
 }
 
 .load-btn {
