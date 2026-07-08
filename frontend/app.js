@@ -1,12 +1,10 @@
 console.log('app.js loaded')
-//TODO: Set up Font Awsome in index.html
-//TODO: Add icon buttons (load, edit, delete) to each saved order card in renderSavedOrders
 //TODO: Add character counter (e.g. "27/50") for the saved order name input
 //TODO: Add Edit, Load, Delete text buttons to the modal
+//TODO: Add confirmation popup before deleting an order ("Are you sure you want to delete this order?")
+//TODO: (contd) Wire up delete functionality to the Delete button in the modal
 //TODO: Implement edit mode - load order into calculator and overwrite on save
 //TODO: Implement load as new = load order into calculator and save as a new entry
-//TODO: Implement delete order - remove from localStorage and re-render list
-//[ ]:DONE: FIXME: Fix modal items accumulating when same order opened multiple times
 //TODO: Add "Did you mean?" fuzzy matching
 
 
@@ -53,6 +51,12 @@ function renderSavedOrders() {
         <i class="fa-solid fa-trash action-delete"></i>
         </div>
         `
+        const deleteBtn = order.querySelector('.action-delete')
+        deleteBtn.addEventListener('click', function(event) {
+            deleteOrder(i)
+            event.stopPropagation()
+        })
+
         // Opens the modal and populates it with the clicked order's data
         order.addEventListener('click', function() {
             const modal = document.getElementById('order-modal')
@@ -86,6 +90,18 @@ function renderSavedOrders() {
     }
 
 }
+
+// Removes the selected order/arrangment from the localStorage and re-renders
+function deleteOrder (index){
+    const stored = localStorage.getItem('savedOrders')
+    const allOrders = stored ? JSON.parse(stored) : []
+    allOrders.splice(index, 1)
+    localStorage.setItem('savedOrders', JSON.stringify(allOrders))
+    renderSavedOrders()
+}
+
+
+
 
 const closeBtn = document.getElementById('close-btn')
 // Closes the modal when the X button is clicked
