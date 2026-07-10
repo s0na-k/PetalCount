@@ -1,17 +1,26 @@
 console.log('app.js loaded')
-//TODO: Add character counter (e.g. "27/50") for the saved order name input
-//TODO: Add Edit, Load, Delete text buttons to the modal
-//TODO: Add confirmation popup before deleting an order ("Are you sure you want to delete this order?")
-//TODO: (contd) Wire up delete functionality to the Delete button in the modal
-//TODO: Implement edit mode - load order into calculator and overwrite on save
-//TODO: Implement load as new = load order into calculator and save as a new entry
-//TODO: Add "Did you mean?" fuzzy matching
+// TODO: Add character counter (e.g. "27/50") for the saved order name input
+// TODO: Implement edit mode - load order into calculator and overwrite on save
+// TODO: Implement load as new = load order into calculator and save as a new entry
+// TODO: Replace alert() and confirm() dialogs with custom styled modals
+// TODO: Add "Did you mean?" fuzzy matching
+
+// [ ]: Week 5
+// TODO: Add price adjustment field to allow flourist to set final selling price
+// TODO: Add discount field (% or flat amount) to results section
+// TODO: Add print/save as PDF button in the modal
+// TODO: Add show/hide toggle for saved orders list
+// TODO: Add filter options for saved orders (name, items, price)
+// TODO: Add optional Notes field to saved orders
+// TODO: Add optional Link field to saved orders (for website arrangements)
+// TODO: Add optional Photo upload to saved orders
+// TODO: Auto-open modal after saving an order to show available options
 
 
 const inventory = {
   "rose":            {cost: 2,   loose: 4,  wrapped: 6, vase: 7 },
   "red rose":        {cost: 2,   loose: 5,  wrapped: 7, vase: 8 },
-  "hydreangea":      {cost: 2,   loose: 6, wrapped: 8, vase: 10 },
+  "hydrangea":      {cost: 2,   loose: 6, wrapped: 8, vase: 10 },
   "greenery":        { cost: 0.5, loose: 1,  wrapped: 2, vase: 2.5 },
   "lily":            { cost: 3,   loose: 8, wrapped: 10, vase: 14 },
   "tulip":           { cost: 1.5,   loose: 4,  wrapped: 5,  vase: 6 },
@@ -84,6 +93,14 @@ function renderSavedOrders() {
                 `
                 modalItems.appendChild(modalRow)
             }
+
+            modal.dataset.index = i
+        })
+
+         document.getElementById('modal-delete-btn').addEventListener('click', function() {
+            const index = parseInt(document.getElementById('order-modal').dataset.index)
+            deleteOrder(index)
+            document.getElementById('order-modal').classList.add('hidden')
         })
         
         document.getElementById('saved-orders-list').appendChild(order)
@@ -95,9 +112,13 @@ function renderSavedOrders() {
 function deleteOrder (index){
     const stored = localStorage.getItem('savedOrders')
     const allOrders = stored ? JSON.parse(stored) : []
-    allOrders.splice(index, 1)
-    localStorage.setItem('savedOrders', JSON.stringify(allOrders))
-    renderSavedOrders()
+    const check = confirm(`Are you sure you want to delete "${allOrders[index].name}"?`)
+    if (check) {
+        allOrders.splice(index, 1)
+        localStorage.setItem('savedOrders', JSON.stringify(allOrders))
+        renderSavedOrders()
+    }
+    
 }
 
 
