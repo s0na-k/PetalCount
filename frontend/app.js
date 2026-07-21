@@ -339,9 +339,17 @@ document.getElementById('calculate-btn').addEventListener('click', function () {
 
 })
 
+// Updates the character counter as the user types in the order name input
+const orderName = document.getElementById('order-name-input')
+orderName.addEventListener('input', function() {
+    let orderNameLength = orderName.value.length
+    const charCounter = document.getElementById('name-char-counter')
+    charCounter.textContent = `${orderNameLength}/50`
+})
+
 // Saves current order to localStorage, blocking duplicate name+type combinations
 document.getElementById('save-order-btn').addEventListener('click', function () {
-    const orderName = document.getElementById('order-name-input')
+    orderName = document.getElementById('order-name-input')
     if (!orderName.value) {
         alert('Please enter a name for this order')
         return
